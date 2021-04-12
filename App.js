@@ -9,7 +9,7 @@ import Screen from "./__Screen";
 
 const Stack = createStackNavigator();
 
-const HomeScreenTemp = () => {
+const DashboardScreenTemp = () => {
     return (
         <Screen>
             <Text>Hello World</Text>
@@ -26,7 +26,10 @@ export default function App() {
                     component={LoginRegisterScreen}
                     options={{ headerShown: false }}
                 />
-                <Stack.Screen name="Home" component={HomeScreenTemp} />
+                <Stack.Screen
+                    name="Dashboard"
+                    component={DashboardScreenTemp}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

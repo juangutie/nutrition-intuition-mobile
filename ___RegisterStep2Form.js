@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -8,7 +8,7 @@ import ErrorText from "./__ErrorText";
 import Colors from "./_Colors";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default RegisterStep1Form = ({
+export default RegisterStep2Form = ({
     defaultFirstNameInput,
     defaultLastNameInput,
     defaultGenderInput,
@@ -25,8 +25,6 @@ export default RegisterStep1Form = ({
     onNextStep,
     onGoBack,
 }) => {
-    const [genderPickerInput, setGenderPickerInput] = useState("");
-
     return (
         <View style={styles.form}>
             <Text style={styles.title}>Register: Step 2</Text>
@@ -51,7 +49,7 @@ export default RegisterStep1Form = ({
                     style={styles.picker}
                     itemStyle={styles.picker_item}
                 >
-                    <Picker.Item label="Gender:" value="" enabled={false} />
+                    <Picker.Item label="Gender:" value="" />
                     <Picker.Item label="Male" value="male" />
                     <Picker.Item label="Female" value="female" />
                     <Picker.Item label="Other" value="other" />
@@ -110,12 +108,12 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     picker: {
-        height: 160,
         marginVertical: 10,
         backgroundColor: Colors.off_white,
         borderRadius: 5,
     },
     picker_item: {
+        height: 110,
         color: Colors.input_text,
     },
     button: {

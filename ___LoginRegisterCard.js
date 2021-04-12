@@ -1,17 +1,12 @@
 import React, { useState } from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    Pressable,
-    Keyboard,
-} from "react-native";
+import { StyleSheet, View, Image, Pressable, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import LoginForm from "./___LoginForm";
 import RegisterStep1Form from "./___RegisterStep1Form";
 import RegisterStep2Form from "./___RegisterStep2Form";
+import RegisterStep3Form from "./___RegisterStep3Form";
+import EmailConfirmationForm from "./___EmailConfirmationForm";
 import * as API from "./_API";
 import Colors from "./_Colors";
 
@@ -36,6 +31,9 @@ export default LoginRegister = () => {
     const [ageInput, setAgeInput] = useState("");
     const [heightInput, setHeightInput] = useState("");
 
+    const [calorieGoalInput, setCalorieGoalInput] = useState("");
+    const [weightGoalInput, setWeightGoalInput] = useState("");
+
     const changeStageTo = (stage) => {
         return () => {
             setErrorMessage("");
@@ -45,15 +43,17 @@ export default LoginRegister = () => {
 
     const loginHandler = async function () {
         try {
+            setErrorMessage("");
+
             if (usernameInput.trim() === "") throw "No Username provided";
             if (passwordInput.trim() === "") throw "No Password provided";
 
             const response = await API.login(usernameInput, passwordInput);
 
+            if (response.error) throw response.error;
             if (response.id <= 0) throw "User/Password combination incorrect";
 
-            setErrorMessage("");
-            navigation.navigate("Home");
+            navigation.navigate("Dashboard");
         } catch (error) {
             setErrorMessage(error.toString());
         }
@@ -63,6 +63,8 @@ export default LoginRegister = () => {
 
     const registerStep1Handler = async function () {
         try {
+            setErrorMessage("");
+
             if (registerUsernameInput.trim() === "")
                 throw "Please enter a Username";
             if (emailInput.trim() === "") throw "Please enter your Email";
@@ -78,9 +80,9 @@ export default LoginRegister = () => {
                 emailInput
             );
 
+            if (response.error) throw response.error;
             if (response.id <= 0) throw response.error;
 
-            setErrorMessage("");
             changeStageTo("registerStep2")();
         } catch (error) {
             setErrorMessage(error.toString());
@@ -91,6 +93,8 @@ export default LoginRegister = () => {
 
     const registerStep2Handler = function () {
         try {
+            setErrorMessage("");
+
             if (firstNameInput.trim() === "")
                 throw "Please enter your First Name";
             if (lastNameInput.trim() === "")
@@ -100,13 +104,60 @@ export default LoginRegister = () => {
             if (ageInput.trim() === "") throw "Please enter your Age";
             if (heightInput.trim() === "") throw "Please enter your Height";
 
-            setErrorMessage("");
             changeStageTo("registerStep3")();
         } catch (error) {
             setErrorMessage(error.toString());
         }
 
         Keyboard.dismiss();
+    };
+
+    const registerStep3Handler = async function () {
+        try {
+            setErrorMessage("");
+
+            if (calorieGoalInput.trim() === "")
+                throw "Please enter a Calorie Goal";
+            if (weightGoalInput.trim() === "")
+                throw "Please enter a Weight Goal";
+
+            const response = await API.register({
+                login: registerUsernameInput,
+                email: emailInput,
+                password: registerPasswordInput,
+                firstName: firstNameInput,
+                lastName: lastNameInput,
+                age: ageInput,
+                weight: weightInput,
+                goalWeight: weightGoalInput,
+                calorieGoal: calorieGoalInput,
+                height: heightInput,
+                gender: genderInput,
+            });
+
+            if (response.error) throw response.error;
+            if (response.id <= 0) throw "User already exists";
+
+            changeStageTo("emailConfirmation")();
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
+
+        Keyboard.dismiss();
+    };
+
+    const resendEmailHandler = async function () {
+        try {
+            setErrorMessage("");
+
+            const response = await API.resendVerificationEmail(emailInput);
+
+            if (response.error) throw response.error;
+
+            setErrorMessage("Confirmation email sent");
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
     };
 
     const Form = {
@@ -158,17 +209,33 @@ export default LoginRegister = () => {
                 errorMessage={errorMessage}
             />
         ),
+        registerStep3: (
+            <RegisterStep3Form
+                defaultCalorieGoalInput={calorieGoalInput}
+                defaultWeightGoalInput={weightGoalInput}
+                setCalorieGoalInput={setCalorieGoalInput}
+                setWeightGoalInput={setWeightGoalInput}
+                onFinalizeRegistration={registerStep3Handler}
+                onGoBack={changeStageTo("registerStep2")}
+                errorMessage={errorMessage}
+            />
+        ),
+        emailConfirmation: (
+            <EmailConfirmationForm
+                errorMessage={errorMessage}
+                onResendEmail={resendEmailHandler}
+                onBackToLogin={changeStageTo("login")}
+            />
+        ),
     };
 
     return (
         <Pressable onPress={Keyboard.dismiss}>
             <View style={styles.card}>
-                {/* TODO: Replace Logo Text with Logo Image */}
                 <Image
                     style={styles.image}
-                    source={require("./media/logo.png")}
+                    source={require("./media/logo2.jpg")}
                 />
-                {/* <Text style={styles.logo_text}>Nutrition Intuition</Text> */}
                 {Form[currentStage]}
             </View>
         </Pressable>
@@ -193,14 +260,8 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 5, height: 8 },
         shadowOpacity: 0.4,
     },
-    logo_text: {
-        color: Colors.mint_green,
-        fontWeight: "bold",
-        fontSize: 30,
-    },
     image: {
-        width: 220,
-        height: 70,
-        marginBottom: 5,
+        width: 200,
+        height: 72,
     },
 });

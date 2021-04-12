@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
     error: {
         color: Colors.error,
         textAlign: "center",
-        marginVertical: 12,
+        marginVertical: 8,
     },
     no_error: {
         color: Colors.error,
         textAlign: "center",
-        marginVertical: 0,
+        height: 0,
     },
 });

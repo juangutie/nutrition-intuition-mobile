@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View, Pressable, Text } from "react-native";
 
 import TextBox from "./__TextBox";
