@@ -52,3 +52,19 @@ export async function resendVerificationEmail(email) {
         }
     ).then((response) => response.json());
 }
+
+export async function sendPasswordResetEmail(username, newPassword) {
+    var json = JSON.stringify({
+        login: username,
+        newPassword: newPassword,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/resetpassword",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}

@@ -7,6 +7,7 @@ import RegisterStep1Form from "./___RegisterStep1Form";
 import RegisterStep2Form from "./___RegisterStep2Form";
 import RegisterStep3Form from "./___RegisterStep3Form";
 import EmailConfirmationForm from "./___EmailConfirmationForm";
+import PasswordResetForm from "./___PasswordResetForm";
 import * as API from "./_API";
 import Colors from "./_Colors";
 
@@ -33,6 +34,10 @@ export default LoginRegister = () => {
 
     const [calorieGoalInput, setCalorieGoalInput] = useState("");
     const [weightGoalInput, setWeightGoalInput] = useState("");
+
+    const [recoveryUsernameInput, setRecoveryUsernameInput] = useState("");
+    const [newPasswordInput, setNewPasswordInput] = useState("");
+    const [confirmNewPasswordInput, setConfirmNewPasswordInput] = useState("");
 
     const changeStageTo = (stage) => {
         return () => {
@@ -160,6 +165,34 @@ export default LoginRegister = () => {
         }
     };
 
+    const passwordResetHandler = async function () {
+        try {
+            setErrorMessage("");
+
+            if (recoveryUsernameInput.trim() === "")
+                throw "Please enter your Username";
+            if (newPasswordInput.trim() === "")
+                throw "Please enter your New Password";
+            if (confirmNewPasswordInput.trim() === "")
+                throw "Please confirm your New Password";
+            if (newPasswordInput !== confirmNewPasswordInput)
+                throw "Passwords do not match";
+
+            const response = await API.sendPasswordResetEmail(
+                recoveryUsernameInput,
+                newPasswordInput
+            );
+
+            if (response.error) throw response.error;
+
+            setErrorMessage(
+                "An email will be sent to the associated username if it exists"
+            );
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
+    };
+
     const Form = {
         login: (
             <LoginForm
@@ -169,9 +202,7 @@ export default LoginRegister = () => {
                 setPasswordInput={setPasswordInput}
                 onLogin={loginHandler}
                 onRegister={changeStageTo("registerStep1")}
-                onForgotPassword={() =>
-                    alert('changeStageTo("forgotPassword")')
-                }
+                onForgotPassword={changeStageTo("passwordReset")}
                 errorMessage={errorMessage}
             />
         ),
@@ -224,6 +255,19 @@ export default LoginRegister = () => {
             <EmailConfirmationForm
                 errorMessage={errorMessage}
                 onResendEmail={resendEmailHandler}
+                onBackToLogin={changeStageTo("login")}
+            />
+        ),
+        passwordReset: (
+            <PasswordResetForm
+                defaultUsernameInput={recoveryUsernameInput}
+                defaultPasswordInput={newPasswordInput}
+                defaultConfirmPasswordInput={confirmNewPasswordInput}
+                setUsernameInput={setRecoveryUsernameInput}
+                setPasswordInput={setNewPasswordInput}
+                setConfirmPasswordInput={setConfirmNewPasswordInput}
+                errorMessage={errorMessage}
+                onSendResetPasswordEmail={passwordResetHandler}
                 onBackToLogin={changeStageTo("login")}
             />
         ),

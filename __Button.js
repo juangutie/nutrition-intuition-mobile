@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     button_title: {
         color: Colors.off_white,
         fontSize: 20,
+        textAlign: "center",
         fontWeight: "bold",
     },
 });
