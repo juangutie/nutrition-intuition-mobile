@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 const DashboardScreenTemp = () => {
     return (
         <Screen>
-            <Text>Hello World</Text>
+            <Text>WIP</Text>
         </Screen>
     );
 };
@@ -20,7 +20,7 @@ const DashboardScreenTemp = () => {
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="LoginRegister">
                 <Stack.Screen
                     name="LoginRegister"
                     component={LoginRegisterScreen}
@@ -29,6 +29,10 @@ export default function App() {
                 <Stack.Screen
                     name="Dashboard"
                     component={DashboardScreenTemp}
+                    options={{
+                        title: "Nutrition Intuition",
+                        headerLeft: () => null,
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
