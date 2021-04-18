@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, Pressable, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// import jwt from "expo-jwt";
+import {
+    setItemAsync as storeItem,
+    getItemAsync as retrieveItem,
+} from "expo-secure-store";
 
 import LoginForm from "./___LoginForm";
 import RegisterStep1Form from "./___RegisterStep1Form";
@@ -17,6 +22,17 @@ export default LoginRegister = () => {
 
     const [errorMessage, setErrorMessage] = useState("");
     const [currentStage, setCurrentStage] = useState("login");
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const token = await retrieveItem("userDataToken");
+                if (token !== null) navigation.navigate("Home");
+            } catch (error) {
+                setErrorMessage(error.toString());
+            }
+        })();
+    }, []);
 
     const [usernameInput, setUsernameInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
@@ -58,6 +74,8 @@ export default LoginRegister = () => {
 
             if (response.error) throw response.error;
             if (response.id <= 0) throw "User/Password combination incorrect";
+
+            await storeItem("userDataToken", response.id.accessToken);
 
             navigation.navigate("Home");
         } catch (error) {
