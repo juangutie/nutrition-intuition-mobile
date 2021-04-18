@@ -1,3 +1,21 @@
+export async function checkLoginJWT(userId, token) {
+    var json = JSON.stringify({
+        userId: userId,
+        jwtToken: token,
+    });
+
+    const response = await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/viewprofile",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+
+    return { error: response.error };
+}
+
 export async function login(username, password) {
     var json = JSON.stringify({
         login: username,

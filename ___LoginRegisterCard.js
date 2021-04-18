@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, Pressable, Keyboard } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-// import jwt from "expo-jwt";
+import jwt_decode from "jwt-decode";
 import {
     setItemAsync as storeItem,
     getItemAsync as retrieveItem,
@@ -26,8 +26,16 @@ export default LoginRegister = () => {
     useEffect(() => {
         (async () => {
             try {
-                const token = await retrieveItem("userDataToken");
-                if (token !== null) navigation.navigate("Home");
+                const id = await retrieveItem("userId");
+                const token = await retrieveItem("userJWT");
+
+                if (id === null || token === null) throw "";
+
+                const response = await API.checkLoginJWT(id, token);
+
+                if (response.error) throw "";
+
+                navigation.navigate("Home");
             } catch (error) {
                 setErrorMessage(error.toString());
             }
@@ -75,7 +83,9 @@ export default LoginRegister = () => {
             if (response.error) throw response.error;
             if (response.id <= 0) throw "User/Password combination incorrect";
 
-            await storeItem("userDataToken", response.id.accessToken);
+            const token = response.id.accessToken;
+            await storeItem("userJWT", token);
+            await storeItem("userId", jwt_decode(token).userId);
 
             navigation.navigate("Home");
         } catch (error) {
