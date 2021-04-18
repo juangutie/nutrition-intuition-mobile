@@ -13,6 +13,7 @@ import Colors from "./_Colors";
 
 export default LoginRegister = () => {
     const navigation = useNavigation();
+    const md5 = require("md5");
 
     const [errorMessage, setErrorMessage] = useState("");
     const [currentStage, setCurrentStage] = useState("login");
@@ -53,12 +54,12 @@ export default LoginRegister = () => {
             if (usernameInput.trim() === "") throw "No Username provided";
             if (passwordInput.trim() === "") throw "No Password provided";
 
-            const response = await API.login(usernameInput, passwordInput);
+            const response = await API.login(usernameInput, md5(passwordInput));
 
             if (response.error) throw response.error;
             if (response.id <= 0) throw "User/Password combination incorrect";
 
-            navigation.navigate("Dashboard");
+            navigation.navigate("Home");
         } catch (error) {
             setErrorMessage(error.toString());
         }
@@ -129,7 +130,7 @@ export default LoginRegister = () => {
             const response = await API.register({
                 login: registerUsernameInput,
                 email: emailInput,
-                password: registerPasswordInput,
+                password: md5(registerPasswordInput),
                 firstName: firstNameInput,
                 lastName: lastNameInput,
                 age: ageInput,
@@ -180,7 +181,7 @@ export default LoginRegister = () => {
 
             const response = await API.sendPasswordResetEmail(
                 recoveryUsernameInput,
-                newPasswordInput
+                md5(newPasswordInput)
             );
 
             if (response.error) throw response.error;

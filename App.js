@@ -1,21 +1,11 @@
-import "react-native-gesture-handler";
 import React from "react";
-import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import LoginRegisterScreen from "./____LoginRegisterScreen";
-import Screen from "./__Screen";
+import HomeScreen from "./____HomeScreen";
 
 const Stack = createStackNavigator();
-
-const DashboardScreenTemp = () => {
-    return (
-        <Screen>
-            <Text>WIP</Text>
-        </Screen>
-    );
-};
 
 export default function App() {
     return (
@@ -27,8 +17,8 @@ export default function App() {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="Dashboard"
-                    component={DashboardScreenTemp}
+                    name="Home"
+                    component={HomeScreen}
                     options={{
                         title: "Nutrition Intuition",
                         headerLeft: () => null,
