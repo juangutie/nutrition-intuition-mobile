@@ -7,14 +7,14 @@ import {
     getItemAsync as retrieveItem,
 } from "expo-secure-store";
 
-import LoginForm from "./___LoginForm";
-import RegisterStep1Form from "./___RegisterStep1Form";
-import RegisterStep2Form from "./___RegisterStep2Form";
-import RegisterStep3Form from "./___RegisterStep3Form";
-import EmailConfirmationForm from "./___EmailConfirmationForm";
-import PasswordResetForm from "./___PasswordResetForm";
-import * as API from "./_API";
-import Colors from "./_Colors";
+import * as API from "./___API";
+import Colors from "./___Colors";
+import LoginForm from "./_Form_Login";
+import RegisterStep1Form from "./_Form_RegisterStep1";
+import RegisterStep2Form from "./_Form_RegisterStep2";
+import RegisterStep3Form from "./_Form_RegisterStep3";
+import EmailConfirmationForm from "./_Form_EmailConfirmation";
+import PasswordResetForm from "./_Form_PasswordReset";
 
 export default LoginRegister = () => {
     const navigation = useNavigation();
@@ -31,7 +31,7 @@ export default LoginRegister = () => {
 
                 if (id === null || token === null) throw "";
 
-                const response = await API.checkLoginJWT(id, token);
+                const response = await API.getUserInfo(id, token);
 
                 if (response.error) throw "";
 
@@ -137,6 +137,15 @@ export default LoginRegister = () => {
             if (weightInput.trim() === "") throw "Please enter your Weight";
             if (ageInput.trim() === "") throw "Please enter your Age";
             if (heightInput.trim() === "") throw "Please enter your Height";
+
+            if (genderInput === "male")
+                setCalorieGoalInput(
+                    (Number(weightInput) * 12 * 1.1).toFixed(2)
+                );
+            else
+                setCalorieGoalInput(
+                    (Number(weightInput) * 12 * 1.0).toFixed(2)
+                );
 
             changeStageTo("registerStep3")();
         } catch (error) {

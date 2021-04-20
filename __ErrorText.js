@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 
-import Colors from "./_Colors";
+import Colors from "./___Colors";
 
 export default ErrorText = (props) => {
     return (

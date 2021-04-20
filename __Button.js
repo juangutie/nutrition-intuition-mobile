@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Pressable, Text } from "react-native";
 
-import Colors from "./_Colors";
+import Colors from "./___Colors";
 
 export default Button = (props) => {
     const [buttonStyle, setButtonStyle] = useState(styles.button);

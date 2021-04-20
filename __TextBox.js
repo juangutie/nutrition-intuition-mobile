@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
 
-import Colors from "./_Colors";
+import Colors from "./___Colors";
 
 export default TextBox = (props) => {
     return (

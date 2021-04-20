@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
+import Colors from "./___Colors";
 import TextBox from "./__TextBox";
 import Button from "./__Button";
 import ErrorText from "./__ErrorText";
-import Colors from "./_Colors";
 
 export default RegisterStep3Form = ({
     defaultCalorieGoalInput,
@@ -18,6 +18,9 @@ export default RegisterStep3Form = ({
     return (
         <View style={styles.form}>
             <Text style={styles.title}>Register: Step 3</Text>
+            <Text style={styles.body}>
+                Calorie goal reccomended based on your profile:
+            </Text>
             <TextBox
                 placeholder="Calorie Goal"
                 defaultValue={defaultCalorieGoalInput}
@@ -56,7 +59,11 @@ const styles = StyleSheet.create({
     title: {
         color: Colors.mint_green,
         fontSize: 30,
-        marginVertical: 10,
+        marginTop: 10,
+    },
+    body: {
+        color: Colors.off_white,
+        textAlign: "center",
     },
     input: {
         marginVertical: 0,

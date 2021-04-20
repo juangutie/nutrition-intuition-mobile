@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 
+import Colors from "./___Colors";
 import TextBox from "./__TextBox";
 import Button from "./__Button";
 import ErrorText from "./__ErrorText";
-import Colors from "./_Colors";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default RegisterStep2Form = ({
     defaultFirstNameInput,

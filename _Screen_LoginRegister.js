@@ -2,8 +2,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Video } from "expo-av";
 
-import LoginRegisterCard from "./___LoginRegisterCard";
 import Screen from "./__Screen";
+import LoginRegisterCard from "./_Card_LoginRegister";
 
 export default LoginRegisterScreen = () => {
     return (

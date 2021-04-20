@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
+import Colors from "./___Colors";
 import TextBox from "./__TextBox";
 import Button from "./__Button";
 import ErrorText from "./__ErrorText";
-import Colors from "./_Colors";
 
 export default RegisterStep1Form = ({
     defaultUsernameInput,
