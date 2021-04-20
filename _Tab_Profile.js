@@ -12,7 +12,7 @@ import Colors from "./___Colors";
 import Screen from "./__Screen";
 import Button from "./__Button";
 
-export default ____ProfileScreen = () => {
+export default ProfileTab = () => {
     const navigation = useNavigation();
 
     const [errorMessage, setErrorMessage] = useState("");
@@ -35,7 +35,7 @@ export default ____ProfileScreen = () => {
                 setErrorMessage(error.toString());
             }
         })();
-    }, []);
+    }, [firstName]);
 
     async function logOutHandler() {
         try {
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     },
     button_red: {
         width: "75%",
-        // alignSelf: "stretch",
         backgroundColor: Colors.error,
     },
 });
