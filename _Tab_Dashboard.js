@@ -10,20 +10,6 @@ import * as API from "./___API";
 import Screen from "./__Screen.js";
 import MealtimeCard from "./_Card_Mealtime";
 
-/*
-    TODO:
-        Header:
-            • Add Quick Add Button/Modal
-        History:
-            • Add monthly mealtime list
-        Dashboard:
-            • Add daily mealtime list
-            • Add Carb/Protein/Fat Breakdown
-        Profile:
-            • Add Edit Personal Info Button/Modal
-            • Add Edit Nutrition Goal Button/Modal
-            • Add Password Reset Button/Modal
-*/
 // const MEALTIMES = [
 //     {
 //         id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",

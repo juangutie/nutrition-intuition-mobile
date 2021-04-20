@@ -10,6 +10,21 @@ import AddMealModal from "./_Modal_AddMeal";
 
 const Stack = createStackNavigator();
 
+/*
+    TODO:
+        Header:
+            • Add Quick Add Button/Modal
+        History:
+            • Add monthly mealtime list
+        Dashboard:
+            • Add daily mealtime list
+            • Add Carb/Protein/Fat Breakdown
+        Profile:
+            • Add Edit Personal Info Button/Modal
+            • Add Edit Nutrition Goal Button/Modal
+            • Add Password Reset Button/Modal
+*/
+
 export default function App() {
     const [addMealModalVisible, setAddMealModalVisible] = useState(false);
 
