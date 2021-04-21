@@ -14,17 +14,15 @@ const Stack = createStackNavigator();
     TODO:
         Header:
             • Add Quick Add from existing meal
-        History:
+        History/Dashboard:
             • Swipe to delete meal
-        Profile:
-            • Add Edit Personal Info Button/Modal
-            • Add Edit Nutrition Goal Button/Modal
-            • Add Password Reset Button/Modal
     
     STRETCH:
         • Swipe between screens
         Dashboard:
             • Nutrient Pie Chart
+        Profile:
+            • Add Password Reset Button/Modal
 */
 
 export default function App() {

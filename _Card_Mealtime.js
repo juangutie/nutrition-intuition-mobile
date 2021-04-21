@@ -18,6 +18,7 @@ export default MealtimeCard = ({ data }) => {
 
     return (
         <View style={styles.card}>
+            <Text style={styles.date}>{data.Date.substring(0, 10)}</Text>
             <Text style={styles.totalCalories}>
                 Total calories: {data.totalCalCount}
             </Text>
@@ -55,6 +56,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-around",
         borderRadius: 10,
+    },
+    date: {
+        marginBottom: 10,
+        fontSize: 16,
+        color: "green",
     },
     totalCalories: {
         fontSize: 20,

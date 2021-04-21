@@ -40,6 +40,19 @@ export async function register(obj) {
     ).then((response) => response.json());
 }
 
+export async function updateProfile(obj) {
+    var json = JSON.stringify(obj);
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/updateprofile",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
 export async function resendVerificationEmail(email) {
     var json = JSON.stringify({ email: email });
 

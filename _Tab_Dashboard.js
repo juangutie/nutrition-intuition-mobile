@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, ScrollView } from "react-native";
 import { getItemAsync as retrieveItem } from "expo-secure-store";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -12,9 +12,10 @@ import ErrorText from "./__ErrorText";
 export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [firstName, setFirstName] = useState("");
+    const [calorieGoal, setCalorieGoal] = useState("");
     const [todayMealtime, setTodayMealtime] = useState(undefined);
 
-    const loadFirstName = async function () {
+    const loadInitialData = async function () {
         try {
             const id = await retrieveItem("userId");
             const token = await retrieveItem("userJWT");
@@ -26,6 +27,7 @@ export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
             if (response.error) throw "";
 
             setFirstName(response.firstName);
+            setCalorieGoal(response.calorieGoal);
         } catch (error) {
             setErrorMessage(error.toString());
         }
@@ -43,6 +45,7 @@ export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
             if (response.error) throw "";
 
             setFirstName(response.firstName);
+            setCalorieGoal(response.calorieGoal);
 
             response = await API.mealtimeCheck(userId, userToken);
 
@@ -64,7 +67,7 @@ export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
     };
 
     useEffect(() => {
-        loadFirstName();
+        loadInitialData();
     }, []);
 
     useFocusEffect(
@@ -90,23 +93,32 @@ export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
             <Screen style={styles.screen}>
                 <Text style={styles.heading}>Hello, {firstName}</Text>
                 <Text style={styles.subheading}>Here are today's stats:</Text>
-                <Text style={styles.sectionTitle}>
-                    Total calories: {todayMealtime.totalCal}
-                </Text>
-                <Text style={styles.totalnutrients}>
-                    Total Fat: {todayMealtime.totalFat}g
-                </Text>
-                <Text style={styles.totalnutrients}>
-                    Total Sodium: {todayMealtime.totalSodium}mg
-                </Text>
-                <Text style={styles.totalnutrients}>
-                    Total Carbs: {todayMealtime.totalCarbs}g
-                </Text>
-                <Text style={styles.totalnutrients}>
-                    Total Protein: {todayMealtime.totalProtein}g
-                </Text>
-                <Text style={styles.sectionTitle}>Today's Meals:</Text>
                 <FlatList
+                    ListHeaderComponent={
+                        <View style={styles.listheader}>
+                            <Text style={styles.sectionTitle}>
+                                Total calories: {todayMealtime.totalCal}
+                            </Text>
+                            <Text style={styles.calorieGoal}>
+                                (Your daily goal is: {calorieGoal})
+                            </Text>
+                            <Text style={styles.totalnutrients}>
+                                Total Fat: {todayMealtime.totalFat}g
+                            </Text>
+                            <Text style={styles.totalnutrients}>
+                                Total Sodium: {todayMealtime.totalSodium}mg
+                            </Text>
+                            <Text style={styles.totalnutrients}>
+                                Total Carbs: {todayMealtime.totalCarbs}g
+                            </Text>
+                            <Text style={styles.totalnutrients}>
+                                Total Protein: {todayMealtime.totalProtein}g
+                            </Text>
+                            <Text style={styles.sectionTitle}>
+                                Today's Meals:
+                            </Text>
+                        </View>
+                    }
                     data={todayMealtime.meals}
                     renderItem={renderMeal}
                     keyExtractor={(item) => item._id}
@@ -150,11 +162,21 @@ const styles = StyleSheet.create({
         color: Colors.error,
         fontWeight: "500",
     },
+    listheader: {
+        alignItems: "center",
+    },
     sectionTitle: {
         marginTop: 15,
         fontSize: 32,
         color: "darkgreen",
         fontWeight: "500",
+    },
+    calorieGoal: {
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: "500",
+        fontStyle: "italic",
+        color: "black",
     },
     totalnutrients: {
         padding: 2,
@@ -163,11 +185,16 @@ const styles = StyleSheet.create({
         fontWeight: "500",
     },
     mealList: {
-        width: "80%",
+        alignSelf: "stretch",
     },
     meal: {
+        width: "70%",
+        margin: 6,
         padding: 6,
+        borderRadius: 10,
         alignItems: "center",
+        alignSelf: "center",
+        backgroundColor: "lightgreen",
     },
     mealName: {
         fontSize: 18,
@@ -175,8 +202,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     nutrients: {
-        fontSize: 16,
-        color: "#6495ED",
+        // fontSize: 16,
+        // color: "#6495ED",
     },
     button: {
         backgroundColor: "green",
