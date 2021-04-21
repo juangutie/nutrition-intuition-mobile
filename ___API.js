@@ -193,3 +193,37 @@ export async function viewMealTime(mealtimeId, mealtimeToken) {
         }
     ).then((response) => response.json());
 }
+
+export async function removeMealFromMealtime(mealtimeId, mealId, userToken) {
+    var json = JSON.stringify({
+        mealtimeId: mealtimeId,
+        mealId: mealId,
+        jwtToken: userToken,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/removemealtimemeal",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
+export async function searchMealByName(userId, search, userToken) {
+    var json = JSON.stringify({
+        userId: userId,
+        search: search,
+        jwtToken: userToken,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/searchmealname",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}

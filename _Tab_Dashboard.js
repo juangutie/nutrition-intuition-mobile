@@ -201,10 +201,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         textAlign: "center",
     },
-    nutrients: {
-        // fontSize: 16,
-        // color: "#6495ED",
-    },
+    nutrients: {},
     button: {
         backgroundColor: "green",
     },

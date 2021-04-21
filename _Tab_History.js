@@ -72,11 +72,18 @@ export default HistoryTab = ({ reloadDataEvent, onShowQuickAdd }) => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const refreshHandler = useCallback(() => {
         setIsRefreshing(true);
+        setErrorMessage("");
         loadScreenData();
         wait(500).then(() => setIsRefreshing(false));
     });
 
-    const renderMealtimeCard = ({ item }) => <MealtimeCard data={item} />;
+    const renderMealtimeCard = ({ item }) => (
+        <MealtimeCard
+            data={item}
+            setErrorMessage={setErrorMessage}
+            onRemoveMeal={loadScreenData}
+        />
+    );
 
     if (mealtimes.length !== 0)
         return (
@@ -97,6 +104,7 @@ export default HistoryTab = ({ reloadDataEvent, onShowQuickAdd }) => {
                     }
                     style={styles.mealtimeList}
                 />
+                <ErrorText message={errorMessage} />
             </Screen>
         );
     else

@@ -98,18 +98,21 @@ export default ProfileTab = () => {
         try {
             setErrorMessage("");
 
-            if (firstNameInput.trim() === "")
+            if (String(firstNameInput).trim() === "")
                 throw "Please enter your First Name";
-            if (lastNameInput.trim() === "")
+            if (String(lastNameInput).trim() === "")
                 throw "Please enter your Last Name";
-            if (ageInput.trim() === "") throw "Please enter your Age";
-            if (weightInput.trim() === "") throw "Please enter your Weight";
-            if (heightInput.trim() === "") throw "Please enter your Height";
-            if (weightGoalInput.trim() === "")
+            if (String(ageInput).trim() === "") throw "Please enter your Age";
+            if (String(weightInput).trim() === "")
+                throw "Please enter your Weight";
+            if (String(heightInput).trim() === "")
+                throw "Please enter your Height";
+            if (String(weightGoalInput).trim() === "")
                 throw "Please enter a Weight Goal";
-            if (calorieGoalInput.trim() === "")
+            if (String(calorieGoalInput).trim() === "")
                 throw "Please enter a Calorie Goal";
-            if (genderInput.trim() === "") throw "Please select your Gender";
+            if (String(genderInput).trim() === "")
+                throw "Please select your Gender";
 
             const id = await retrieveItem("userId");
             const token = await retrieveItem("userJWT");
