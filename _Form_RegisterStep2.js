@@ -50,9 +50,9 @@ export default RegisterStep2Form = ({
                     itemStyle={styles.picker_item}
                 >
                     <Picker.Item label="Gender:" value="" />
-                    <Picker.Item label="Male" value="male" />
-                    <Picker.Item label="Female" value="female" />
-                    <Picker.Item label="Other" value="other" />
+                    <Picker.Item label="Male" value="Male" />
+                    <Picker.Item label="Female" value="Female" />
+                    <Picker.Item label="Other" value="Other" />
                 </Picker>
                 <TextBox
                     placeholder="Weight (lbs)"

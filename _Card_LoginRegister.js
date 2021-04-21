@@ -138,7 +138,7 @@ export default LoginRegister = () => {
             if (ageInput.trim() === "") throw "Please enter your Age";
             if (heightInput.trim() === "") throw "Please enter your Height";
 
-            if (genderInput === "male")
+            if (genderInput.toLowerCase() === "male")
                 setCalorieGoalInput(
                     (Number(weightInput) * 12 * 1.1).toFixed(2)
                 );
