@@ -10,18 +10,14 @@ import AddMealModal from "./_Modal_AddMeal";
 
 const Stack = createStackNavigator();
 
-/*
-    TODO:
-        Header:
-            • Add Quick Add from existing meal
-    
-    STRETCH:
-        • Swipe between screens
-        Dashboard:
-            • Swipe to delete meal
-            • Nutrient Pie Chart
-        Profile:
-            • Add Password Reset Button/Modal
+/*  
+STRETCH GOALS:
+    • Swipe between screens
+    Dashboard:
+        • Swipe to delete meal
+        • Nutrient Pie Chart
+    Profile:
+        • Add Password Reset Button/Modal
 */
 
 export default function App() {
