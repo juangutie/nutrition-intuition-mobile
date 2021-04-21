@@ -1,68 +1,136 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, FlatList } from "react-native";
-import {
-    setItemAsync as storeItem,
-    getItemAsync as retrieveItem,
-    deleteItemAsync as deleteItem,
-} from "expo-secure-store";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, View, Text, FlatList } from "react-native";
+import { getItemAsync as retrieveItem } from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native";
 
 import * as API from "./___API";
+import Colors from "./___Colors";
 import Screen from "./__Screen.js";
 import MealtimeCard from "./_Card_Mealtime";
+import Button from "./__Button";
+import ErrorText from "./__ErrorText";
 
-// const MEALTIMES = [
-//     {
-//         id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-//         title: "First Mealtime",
-//     },
-//     {
-//         id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-//         title: "Second Mealtime",
-//     },
-//     {
-//         id: "58694a0f-3da1-471f-bd96-145571e29d72",
-//         title: "Third Mealtime",
-//     },
-// ];
-
-export default DashboardTab = () => {
+export default DashboardTab = ({ reloadDataEvent, onShowQuickAdd }) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [firstName, setFirstName] = useState("");
+    const [todayMealtime, setTodayMealtime] = useState(undefined);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const id = await retrieveItem("userId");
-                const token = await retrieveItem("userJWT");
+    const loadFirstName = async function () {
+        try {
+            const id = await retrieveItem("userId");
+            const token = await retrieveItem("userJWT");
 
-                if (id === null || token === null) throw "";
+            if (id === null || token === null) throw "";
 
-                const response = await API.getUserInfo(id, token);
+            let response = await API.getUserInfo(id, token);
+
+            if (response.error) throw "";
+
+            setFirstName(response.firstName);
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
+    };
+
+    const loadScreenData = async function () {
+        try {
+            const userId = await retrieveItem("userId");
+            const userToken = await retrieveItem("userJWT");
+
+            if (userId === null || userToken === null) throw "";
+
+            let response = await API.getUserInfo(userId, userToken);
+
+            if (response.error) throw "";
+
+            setFirstName(response.firstName);
+
+            response = await API.mealtimeCheck(userId, userToken);
+
+            let mealtimeId = response.id;
+            let mealtimeToken = response.token.accessToken;
+
+            if (mealtimeId === -1) {
+                setTodayMealtime(undefined);
+            } else {
+                response = await API.viewMealTime(mealtimeId, mealtimeToken);
 
                 if (response.error) throw "";
 
-                setFirstName(response.firstName);
-            } catch (error) {
-                setErrorMessage(error.toString());
+                setTodayMealtime(response);
             }
-        })();
-    }, [firstName]);
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
+    };
 
-    const renderMealtimeCard = ({ item }) => (
-        <MealtimeCard title={item.title} />
+    useEffect(() => {
+        loadFirstName();
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            loadScreenData();
+        }, [reloadDataEvent])
     );
 
-    return (
-        <Screen style={styles.screen}>
-            <Text style={styles.heading}>Hello, {firstName}</Text>
-            {/* <Text style={styles.subheading}>Here are today's stats:</Text> */}
-            {/* <FlatList
-                data={MEALTIMES}
-                renderItem={renderMealtimeCard}
-                keyExtractor={(mealtime) => mealtime.id}
-            /> */}
-        </Screen>
-    );
+    const renderMeal = ({ item }) => {
+        return (
+            <View style={styles.meal}>
+                <Text style={styles.mealName}>{item.Name}</Text>
+                <Text style={styles.nutrients}>{item.Calories} calories</Text>
+                <Text style={styles.nutrients}>{item.Protein}g Protein</Text>
+                <Text style={styles.nutrients}>{item.TotalFat}g Fat</Text>
+                <Text style={styles.nutrients}>{item.TotalCarbs}g Carbs</Text>
+            </View>
+        );
+    };
+
+    if (todayMealtime !== undefined)
+        return (
+            <Screen style={styles.screen}>
+                <Text style={styles.heading}>Hello, {firstName}</Text>
+                <Text style={styles.subheading}>Here are today's stats:</Text>
+                <Text style={styles.sectionTitle}>
+                    Total calories: {todayMealtime.totalCal}
+                </Text>
+                <Text style={styles.totalnutrients}>
+                    Total Fat: {todayMealtime.totalFat}g
+                </Text>
+                <Text style={styles.totalnutrients}>
+                    Total Sodium: {todayMealtime.totalSodium}mg
+                </Text>
+                <Text style={styles.totalnutrients}>
+                    Total Carbs: {todayMealtime.totalCarbs}g
+                </Text>
+                <Text style={styles.totalnutrients}>
+                    Total Protein: {todayMealtime.totalProtein}g
+                </Text>
+                <Text style={styles.sectionTitle}>Today's Meals:</Text>
+                <FlatList
+                    data={todayMealtime.meals}
+                    renderItem={renderMeal}
+                    keyExtractor={(item) => item._id}
+                    style={styles.mealList}
+                />
+                <ErrorText message={errorMessage} />
+            </Screen>
+        );
+    else
+        return (
+            <Screen style={styles.screen}>
+                <Text style={styles.heading}>Hello, {firstName}</Text>
+                <Text style={styles.subheading_red}>
+                    No meals today, go add some!
+                </Text>
+                <Button
+                    title="Add new Meal"
+                    onPress={onShowQuickAdd}
+                    style={styles.button}
+                />
+                <ErrorText message={errorMessage} />
+            </Screen>
+        );
 };
 
 const styles = StyleSheet.create({
@@ -76,5 +144,42 @@ const styles = StyleSheet.create({
     subheading: {
         fontSize: 22,
         marginBottom: 10,
+    },
+    subheading_red: {
+        fontSize: 22,
+        marginBottom: 10,
+        color: Colors.error,
+        fontWeight: "500",
+    },
+    sectionTitle: {
+        marginTop: 15,
+        fontSize: 32,
+        color: "darkgreen",
+        fontWeight: "500",
+    },
+    totalnutrients: {
+        padding: 2,
+        fontSize: 22,
+        color: "#00008B",
+        fontWeight: "500",
+    },
+    mealList: {
+        width: "80%",
+    },
+    meal: {
+        padding: 6,
+        alignItems: "center",
+    },
+    mealName: {
+        fontSize: 18,
+        fontWeight: "500",
+        textAlign: "center",
+    },
+    nutrients: {
+        fontSize: 16,
+        color: "#6495ED",
+    },
+    button: {
+        backgroundColor: "green",
     },
 });

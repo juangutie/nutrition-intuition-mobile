@@ -101,3 +101,82 @@ export async function searchMealTime(userId, range, token) {
         }
     ).then((response) => response.json());
 }
+
+export async function addMeal(obj) {
+    var json = JSON.stringify(obj);
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/addmeal",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
+export async function mealtimeCheck(userId, token) {
+    var json = JSON.stringify({
+        userId: userId,
+        jwtToken: token,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/mealtimecheck",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
+export async function addMealtime(userId, meals, token) {
+    var json = JSON.stringify({
+        userId: userId,
+        info: meals,
+        jwtToken: token,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/addmealtime",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
+export async function addMeals(mealtimeId, meals, mealtimeToken) {
+    var json = JSON.stringify({
+        mealtimeId: mealtimeId,
+        info: meals,
+        jwtToken: mealtimeToken,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/addmeals",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}
+
+export async function viewMealTime(mealtimeId, mealtimeToken) {
+    var json = JSON.stringify({
+        mealtimeId: mealtimeId,
+        jwtToken: mealtimeToken,
+    });
+
+    return await fetch(
+        "https://nutrition-intuition.herokuapp.com/api/viewmealtime",
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json,
+        }
+    ).then((response) => response.json());
+}

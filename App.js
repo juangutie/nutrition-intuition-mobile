@@ -13,20 +13,23 @@ const Stack = createStackNavigator();
 /*
     TODO:
         Header:
-            • Add Quick Add Button/Modal
+            • Add Quick Add from existing meal
         History:
-            • Add monthly mealtime list
-        Dashboard:
-            • Add daily mealtime list
-            • Add Carb/Protein/Fat Breakdown
+            • Swipe to delete meal
         Profile:
             • Add Edit Personal Info Button/Modal
             • Add Edit Nutrition Goal Button/Modal
             • Add Password Reset Button/Modal
+    
+    STRETCH:
+        • Swipe between screens
+        Dashboard:
+            • Nutrient Pie Chart
 */
 
 export default function App() {
     const [addMealModalVisible, setAddMealModalVisible] = useState(false);
+    const [reloadDataEvent, setReloadDataEvent] = useState(false);
 
     return (
         <NavigationContainer>
@@ -35,7 +38,12 @@ export default function App() {
                 transparent={true}
                 animationType="slide"
             >
-                <AddMealModal onHide={() => setAddMealModalVisible(false)} />
+                <AddMealModal
+                    onHide={() => {
+                        setAddMealModalVisible(false);
+                        setReloadDataEvent(!reloadDataEvent);
+                    }}
+                />
             </Modal>
             <Stack.Navigator initialRouteName="LoginRegister">
                 <Stack.Screen
@@ -45,7 +53,7 @@ export default function App() {
                 />
                 <Stack.Screen
                     name="Home"
-                    component={HomeScreen}
+                    // component={HomeScreen}
                     options={{
                         title: "Nutrition Intuition",
                         headerTintColor: "green",
@@ -64,7 +72,15 @@ export default function App() {
                             </Pressable>
                         ),
                     }}
-                />
+                >
+                    {(props) => (
+                        <HomeScreen
+                            reloadDataEvent={reloadDataEvent}
+                            onShowQuickAdd={() => setAddMealModalVisible(true)}
+                            {...props}
+                        />
+                    )}
+                </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     );

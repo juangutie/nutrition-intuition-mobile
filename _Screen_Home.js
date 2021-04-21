@@ -8,10 +8,11 @@ import ProfileTab from "./_Tab_Profile";
 
 const Tab = createBottomTabNavigator();
 
-export default ____HomeScreen = () => {
+export default HomeScreen = ({ reloadDataEvent, onShowQuickAdd }) => {
     return (
         <Tab.Navigator
             initialRouteName="Dashboard"
+            lazy={false}
             tabBarOptions={{ activeTintColor: "green" }}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
@@ -44,9 +45,29 @@ export default ____HomeScreen = () => {
                 },
             })}
         >
-            <Tab.Screen name="History" component={HistoryTab} />
-            <Tab.Screen name="Dashboard" component={DashboardTab} />
-            <Tab.Screen name="Profile" component={ProfileTab} />
+            <Tab.Screen name="History">
+                {(props) => (
+                    <HistoryTab
+                        reloadDataEvent={reloadDataEvent}
+                        onShowQuickAdd={onShowQuickAdd}
+                        {...props}
+                    />
+                )}
+            </Tab.Screen>
+            <Tab.Screen name="Dashboard">
+                {(props) => (
+                    <DashboardTab
+                        reloadDataEvent={reloadDataEvent}
+                        onShowQuickAdd={onShowQuickAdd}
+                        {...props}
+                    />
+                )}
+            </Tab.Screen>
+            <Tab.Screen name="Profile">
+                {(props) => (
+                    <ProfileTab reloadDataEvent={reloadDataEvent} {...props} />
+                )}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 };

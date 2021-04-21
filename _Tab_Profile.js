@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
-    setItemAsync as storeItem,
     getItemAsync as retrieveItem,
     deleteItemAsync as deleteItem,
 } from "expo-secure-store";
@@ -18,24 +17,26 @@ export default ProfileTab = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [firstName, setFirstName] = useState("");
 
+    const loadFirstName = async function () {
+        try {
+            const id = await retrieveItem("userId");
+            const token = await retrieveItem("userJWT");
+
+            if (id === null || token === null) throw "";
+
+            let response = await API.getUserInfo(id, token);
+
+            if (response.error) throw "";
+
+            setFirstName(response.firstName);
+        } catch (error) {
+            setErrorMessage(error.toString());
+        }
+    };
+
     useEffect(() => {
-        (async () => {
-            try {
-                const id = await retrieveItem("userId");
-                const token = await retrieveItem("userJWT");
-
-                if (id === null || token === null) throw "";
-
-                const response = await API.getUserInfo(id, token);
-
-                if (response.error) throw "";
-
-                setFirstName(response.firstName);
-            } catch (error) {
-                setErrorMessage(error.toString());
-            }
-        })();
-    }, [firstName]);
+        loadFirstName();
+    }, []);
 
     async function logOutHandler() {
         try {
