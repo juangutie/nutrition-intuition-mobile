@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/juangutierrez01/nutrition-intuition-mobile/"><img src=".github/logo.png" alt="Nutrition Intuition logo" width="60%"></a>
+  <a href="https://github.com/juangutierrez01/nutrition-intuition-mobile/"><img src="./logo.png" alt="Nutrition Intuition logo" width="60%"></a>
 </p>
 
 <p align="center">
