@@ -34,3 +34,29 @@ Make tracking meals, calories, and macronutrients easy with Nutrition Intuition'
     <td align="center">Keep track of your progress across the month</td>
   </tr>
 </table>
+
+## Installation
+
+1. Clone this repository:
+   
+    ```bash
+    git clone https://github.com/juangutierrez01/nutrition-intuition-mobile/
+    ```
+    
+2. Navigate to the `src` directory:
+
+    ```bash
+    cd nutrition-intuition-mobile/src/
+    ```
+
+3. Install the node dependencies:
+
+    ```bash
+    npm install
+    ```
+
+4. Start the application and follow the instructions given in the console:
+
+    ```bash
+    expo start
+    ```
